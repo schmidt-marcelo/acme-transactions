@@ -42,3 +42,14 @@ And the response will be:
 `````
 
 There is a lot of room for improvement, but it's a start. 
+
+
+## Setting up
+
+The app uses gradle as a build tool, and docker environments to run. 
+
+* Build the app: ```./gradlew build```
+* Build docker image: ```./gradlew buildImage```
+* Start app with postgres: ```./gradlew start```
+* Stop app and database: ```./gradlew stop```
+
