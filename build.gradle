@@ -1,0 +1,86 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '3.5.0'
+	id 'io.spring.dependency-management' version '1.1.7'
+}
+
+group = 'acme'
+version = '0.0.1'
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(24)
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+configurations {
+    all {
+        exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+    }
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-hateoas'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+	implementation 'org.postgresql:postgresql'
+	implementation "org.springframework.boot:spring-boot-starter-log4j2"
+	//test dependencies
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.mockito:mockito-core:5.10.0'
+	testImplementation "org.assertj:assertj-core:3.24.2" 
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+	
+}
+
+tasks.named('test', Test) {
+	useJUnitPlatform()
+
+	testLogging {
+		events "passed", "skipped", "failed"
+	}
+}
+
+jar {
+    manifest {
+        attributes(
+            'Main-Class': 'acme.transaction.TransactionApplication'
+        )
+    }
+}
+
+bootJar {
+	archiveFileName = 'acme-transactions.jar'
+}
+
+task buildImage(dependsOn: bootJar) {
+	doLast {
+		exec {
+			workingDir projectDir
+			commandLine 'docker', 'build', '-t', 'acme-transactions:latest', '.'
+		}
+	}
+}
+
+task start(dependsOn: buildImage) {
+	doLast {
+		exec {
+			workingDir projectDir
+			commandLine 'docker-compose', 'up', '-d'
+		}
+	}
+}
+
+task stop() {
+	doLast {
+		exec {
+			workingDir projectDir
+			commandLine 'docker-compose', 'down'
+		}
+	}
+}

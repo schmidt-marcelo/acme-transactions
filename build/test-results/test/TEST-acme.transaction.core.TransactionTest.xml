@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="acme.transaction.core.TransactionTest" tests="6" skipped="0" failures="0" errors="0" timestamp="2025-06-06T14:39:19.667Z" hostname="MacBook-Pro-de-Marcelo.local" time="0.002">
+  <properties/>
+  <testcase name="shouldCreatePurchaseWithId()" classname="acme.transaction.core.TransactionTest" time="0.0"/>
+  <testcase name="shouldNotCreatePurchaseWithNegativeTotalAmount()" classname="acme.transaction.core.TransactionTest" time="0.001"/>
+  <testcase name="shouldNotCreatePurchaseWithNullDescription()" classname="acme.transaction.core.TransactionTest" time="0.0"/>
+  <testcase name="shouldCreatePurchaseWithNoIdAndDefaultCurrency()" classname="acme.transaction.core.TransactionTest" time="0.001"/>
+  <testcase name="shouldNotCreatePurchaseWithNullDate()" classname="acme.transaction.core.TransactionTest" time="0.0"/>
+  <testcase name="shouldNotCreatePurchaseWithLongDescription()" classname="acme.transaction.core.TransactionTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

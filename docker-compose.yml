@@ -1,0 +1,49 @@
+services:
+  app:
+    build: .
+    container_name: acme-transactions
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://acme-transactions-db:5432/acme_transactions
+      - SPRING_DATASOURCE_USERNAME=acme
+      - SPRING_DATASOURCE_PASSWORD=w3x_assE55ment
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - TREASURY_EXCHANGE_RATES_URL=https://api.fiscaldata.treasury.gov/services/api/fiscal_service/v1/accounting/od/rates_of_exchange?fields=record_date,country,currency,country_currency_desc,exchange_rate,effective_date&sort=-record_date&page[size]=1000
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - acme-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  db:
+    image: postgres:16
+    container_name: acme-transactions-db
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=acme_transactions
+      - POSTGRES_USER=acme
+      - POSTGRES_PASSWORD=w3x_assE55ment
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - acme-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U acme -d acme_transactions"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres-data:
+
+networks:
+  acme-network:
+    driver: bridge 
